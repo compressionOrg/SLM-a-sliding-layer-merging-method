@@ -21,7 +21,7 @@ def get_llm(model, cache_dir="llm_weights"):
         torch_dtype=torch.float16, 
         cache_dir=cache_dir, 
         low_cpu_mem_usage=True, 
-        device_map="auto"
+        # device_map="auto"
     )
 #     model = LlamaForCausalLM.from_pretrained(
 #         model, 
@@ -33,7 +33,7 @@ def get_llm(model, cache_dir="llm_weights"):
     
     print(model)
     
-    for i in range(32):
+    for i in range(len(model.model.layers)):
         if model.model.layers[i].self_attn.o_proj.bias is None:
             model.model.layers[i].self_attn.o_proj.bias = torch.nn.Parameter(torch.zeros(model.model.layers[i].self_attn.o_proj.out_features).to(torch.float16))
         model.model.layers[i].self_attn.o_proj.bias = torch.nn.Parameter(torch.zeros_like(model.model.layers[i].self_attn.o_proj.bias, device='cpu'))  # 或 'cuda'

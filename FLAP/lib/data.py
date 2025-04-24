@@ -3,7 +3,7 @@
 import numpy as np
 import random
 import torch
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 
 # Set random seed for reproducibility
 def set_seed(seed):
@@ -76,11 +76,13 @@ def get_wikitext2(nsamples, seed, seqlen, tokenizer):
         tuple: A tuple containing trainloader (list of input and target pairs) and encoded test dataset.
     """
     # Load train and test datasets
-    traindata = load_dataset('/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext', split='train')
-    testdata = load_dataset('/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext', split='test')
+    # traindata = load_dataset('/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext', split='train')
+    # testdata = load_dataset('/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext', split='test')
     # traindata = load_dataset('text', data_files='datasets/wikitext/wiki.train.raw', split="train")
     # testdata = load_dataset('text', data_files='datasets/wikitext/wiki.test.raw', split="train")
-    
+    traindata = load_from_disk("/home/zhangyingying/.cache/datasets/wikitext/train")
+    testdata = load_from_disk("/home/zhangyingying/.cache/datasets/wikitext/test")
+
     # Encode datasets
     trainenc = tokenizer(" ".join(traindata['text']), return_tensors='pt')
     testenc = tokenizer("\n\n".join(testdata['text']), return_tensors='pt')
@@ -112,11 +114,12 @@ def get_c4(nsamples, seed, seqlen, tokenizer):
         tuple: A tuple containing trainloader (list of input and target pairs) and encoded validation dataset.
     """
     # Load train and validation datasets
-    traindata = load_dataset('allenai/c4', 'allenai--c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train')
-    valdata = load_dataset('allenai/c4', 'allenai--c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation')
+    # traindata = load_dataset('allenai/c4', 'allenai--c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train')
+    # valdata = load_dataset('allenai/c4', 'allenai--c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation')
     # traindata = load_dataset('json', data_files={'train': 'datasets/c4/c4-train.00000-of-01024.json.gz'}, split='train')
     # valdata = load_dataset('json', data_files={'validation': 'datasets/c4/c4-validation.00000-of-00008.json.gz'}, split='validation')
-    
+    traindata = load_from_disk("/home/zhangyingying/.cache/datasets/c4/train")
+    valdata = load_from_disk("/home/zhangyingying/.cache/datasets/c4/validation")
     # Generate samples from training set using random seed and specified sequence length
     random.seed(seed)
     trainloader = []
@@ -156,9 +159,9 @@ def get_bookcorpus(nsamples, seed, seqlen, tokenizer):
         tuple: A tuple containing trainloader (list of input and target pairs) and encoded validation dataset.
     """
     # Load train and validation datasets
-    dataset = load_dataset("/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/bookcorpus/bookcorpus.py", "plain_text")
-    traindata = dataset["train"]
-    
+    # dataset = load_dataset("/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/bookcorpus/bookcorpus.py", "plain_text")
+    # traindata = dataset["train"]
+    traindata = load_from_disk("/home/zhangyingying/.cache/datasets/bookcorpus/train")
     # traindata = load_dataset('json', data_files={'train': 'datasets/c4/c4-train.00000-of-01024.json.gz'}, split='train')
     # valdata = load_dataset('json', data_files={'validation': 'datasets/c4/c4-validation.00000-of-00008.json.gz'}, split='validation')
     
@@ -213,7 +216,7 @@ def get_loaders(name='wikitext2', nsamples=128, seed=0, seqlen=2048, tokenizer=N
 
     
 if __name__ == "__main__": 
-    get_loaders('wikitext2', seed=0, seqlen=2048, tokenizer=None)
+    get_loaders('bookcorpus', seed=0, seqlen=2048, tokenizer=None)
 
 # Note:
 # This script is designed to load and process various text datasets for training language models.

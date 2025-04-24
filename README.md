@@ -7,9 +7,10 @@
 
 ## Installation
   ```bash
-  conda create -n SLM python=3.9
+  conda create -n SLM python=3.9 -y
   conda activate SLM
   pip install -r requirement.txt
+  conda install pytorch==2.5.1  cudatoolkit=11.3 -c pytorch -c conda-forge
   ```
 
 <details>

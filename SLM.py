@@ -1,8 +1,8 @@
 from tqdm.notebook import tqdm
 from copy import deepcopy
 import copy
-
-from datasets import load_dataset
+from pdb import set_trace as st
+from datasets import load_dataset, load_from_disk
 import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
@@ -33,14 +33,20 @@ def get_examples(
     return_raw_dataset=False,
 ):
     if dataset == "c4":
-        traindata = load_dataset(
-            "allenai/c4",
-            data_files={"train": "en/c4-train.00000-of-01024.json.gz"},
-            split="train",
-        )
+        # traindata = load_dataset(
+        #     "allenai/c4",
+        #     data_files={"train": "en/c4-train.00000-of-01024.json.gz"},
+        #     split="train",
+        # )
+        traindata = load_from_disk("datasets/c4/train")
     elif dataset == "bookcorpus":
-        dataset = load_dataset("bookcorpus/bookcorpus.py", "plain_text")
-        traindata = dataset["train"]
+        # dataset = load_dataset("bookcorpus/bookcorpus.py", "plain_text")
+        # traindata = dataset["train"]
+        # traindata = load_dataset('bookcorpus', split='train')
+        traindata = load_from_disk("datasets/bookcorpus/train")
+        
+        # st()
+        
     else:
         raise NotImplementedError
 
@@ -130,9 +136,9 @@ def save_merged_model(model_copy, save_path):
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
 parser = argparse.ArgumentParser(description="")
-parser.add_argument("--model_path", type=str, default='Llama-2-13b-hf')
-parser.add_argument("--tokenizer_path", type=str, default='Llama-2-13b-hf')
-parser.add_argument("--model_name", type=str, default='Llama-2-13b-hf')
+# parser.add_argument("--model_path", type=str, default='Llama-2-13b-hf')
+# parser.add_argument("--tokenizer_path", type=str, default='Llama-2-13b-hf')
+parser.add_argument("--model_name", type=str, default='meta-llama/Llama-2-7b-hf')
 parser.add_argument("--dataset", type=str, default="bookcorpus")
 parser.add_argument("--threshold", type=float, default=0.72)
 parser.add_argument("--seed", type=int, default=1234)
@@ -152,7 +158,7 @@ torch.backends.cudnn.benchmark = False
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------
 
-model_name = args.model_path
+model_name = args.model_name
 short_model = ShortHFModel(model_name=model_name, layers_path="model.layers")
 tokenizer = short_model.tokenizer
     
@@ -215,5 +221,5 @@ while low_lay >= 0:
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 short_model.config.num_hidden_layers = len(short_model.model.layers)
-save_merged_model(short_model, f'output/{args.model_name}-SLM{THRESHOLD}')
+save_merged_model(short_model, f'output/{args.model_name.split("/")[-1]}-SLM{THRESHOLD}')
 print(f'SLM finish! Total count: {count}, new model layer length:{len(short_model.model.layers)}, records:{records}')
