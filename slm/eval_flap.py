@@ -6,7 +6,7 @@ import torch
 import gc
 
 from convert_to_hf import load_and_replace_weights
-from utils import convert_json2csv_zeroshot
+# from utils import convert_json2csv_zeroshot
 from lm_eval import evaluator, tasks, utils
 
 import argparse

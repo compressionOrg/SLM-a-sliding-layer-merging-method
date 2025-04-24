@@ -103,9 +103,9 @@ def main():
     print(f"model parameter {sum(p.numel() for p in model.parameters()) / 1000 ** 3:.2f}B")
     print("*"*30)
     # Evaluate the model
-    if args.eval:
-        ppl = eval_ppl(model, tokenizer, device)    
-        print(f"ppl on wikitext {ppl}")
+    # if args.eval:
+    #     ppl = eval_ppl(model, tokenizer, device)    
+    #     print(f"ppl on wikitext {ppl}")
         
     # Save the model
 #     if args.save_model:

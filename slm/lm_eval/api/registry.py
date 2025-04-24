@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Dict, Union
 
-import src as hf_evaluate
+import evaluate as hf_evaluate
 
 from lm_eval.api.model import LM
 

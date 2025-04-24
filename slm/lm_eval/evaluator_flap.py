@@ -9,9 +9,9 @@ from typing import TYPE_CHECKING, List, Optional, Union
 import numpy as np
 import torch
 
-import lm_eval.api.metrics
-import lm_eval.api.registry
-import lm_eval.api.task
+# import lm_eval.api.metrics
+# import lm_eval.api.registry
+# import lm_eval.api.task
 import lm_eval.models
 from lm_eval.caching.cache import delete_cache
 from lm_eval.evaluator_utils import (
