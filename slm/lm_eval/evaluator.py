@@ -12,7 +12,7 @@ from lm_eval.models.gpt2 import HFLM
 import numpy as np
 import transformers
 import torch
-import utils
+# import utils
 import models
 
 @positional_deprecated

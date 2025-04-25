@@ -128,9 +128,10 @@ def cal_sim(hidden_states, model2, example_prompts):
 
     return np.mean(sim_ls)  
 
-def save_merged_model(model_copy, save_path):
+def save_merged_model(model_copy, save_path, tokenizer):
     print(f"保存合并后的模型到 {save_path}")
     model_copy.save_pretrained(save_path)
+    tokenizer.save_pretrained(save_path)
     
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------
@@ -221,5 +222,5 @@ while low_lay >= 0:
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 short_model.config.num_hidden_layers = len(short_model.model.layers)
-save_merged_model(short_model, f'output/{args.model_name.split("/")[-1]}-SLM{THRESHOLD}')
+save_merged_model(short_model, f'output/{args.model_name.split("/")[-1]}-SLM{THRESHOLD}', tokenizer)
 print(f'SLM finish! Total count: {count}, new model layer length:{len(short_model.model.layers)}, records:{records}')

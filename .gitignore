@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+*.pyc
 # Distribution / packaging
 .Python
 build/
@@ -170,4 +170,8 @@ results/
 eval_zero_shot
 datasets*
 output/
+out/# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
 out/

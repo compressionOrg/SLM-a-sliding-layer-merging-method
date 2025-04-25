@@ -4,7 +4,10 @@ import gc
 import json
 import random
 import time
-
+import sys
+import os
+# 添加 LLM_Pruner 目录到 Python 路径
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'LLM_Pruner'))
 import numpy as np
 import torch
 from LLMPruner.peft import PeftModel
@@ -15,7 +18,7 @@ from transformers import (
     LlamaForCausalLM,
     LlamaTokenizer,
 )
-from flap.convert_to_hf import load_and_replace_weights
+# from flap.convert_to_hf import load_and_replace_weights
 
 import lm_eval
 

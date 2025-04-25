@@ -1,10 +1,15 @@
 #!/bin/bash
 export CUDA_VISIBLE_DEVICES=0
 
-run_command () {
-    python src/eval_ppl.py --base_model $1 --output_dir results/$2/ppl $3
+pruned_models="output/Llama-2-7b-hf-SLM0.72"
+save_dir=""Llama-2-7b-hf-SLM0.72""
 
-    python src/eval_zeroshot_acc.py \
+run_ppl () {
+    python slm/eval.py --model_name $1 --output_dir results/$2/ppl 
+}
+
+run_zeroshot (){
+    python slm/eval_zeroshot_acc.py \
         --model hf-causal-experimental --no_cache \
         --model_args pretrained=$1 \
         --tasks openbookqa,arc_easy,winogrande,hellaswag,arc_challenge,piqa,boolq \
@@ -12,7 +17,7 @@ run_command () {
 }
 
 
-run_command "llama2-7b-slm0.95" "llama2-7b-slm0.95"
-
+run_ppl $pruned_models $save_dir
+# run_zeroshot $pruned_models $save_dir
 
 

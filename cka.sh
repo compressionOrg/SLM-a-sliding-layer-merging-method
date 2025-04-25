@@ -2,7 +2,7 @@
 export CUDA_VISIBLE_DEVICES=0
 
 run_command () {
-    python src/eval_cka.py \
+    python slm/eval_cka.py \
         --model hf-causal-experimental --no_cache \
         --model_args pretrained=$1 \
         --batch_size 16 \

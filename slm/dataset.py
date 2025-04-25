@@ -8,7 +8,7 @@ https://github.com/horseee/LLM-Pruner/blob/main/LLMPruner/datasets/ppl_dataset.p
 import random
 
 import torch
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 from torch.utils.data.dataset import Dataset
 from datasets import Dataset
 
@@ -26,9 +26,10 @@ class IndexDataset(Dataset):
 def get_wikitext2():
 #     traindata = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
 #     testdata = load_dataset("wikitext", "wikitext-2-raw-v1", split="test")
-    traindata = load_dataset("parquet", data_files="/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext/train-00000-of-00001.parquet", split="train")
-    testdata = load_dataset("parquet", data_files="/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext/test-00000-of-00001.parquet", split="train")
-    
+    # traindata = load_dataset("parquet", data_files="/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext/train-00000-of-00001.parquet", split="train")
+    # testdata = load_dataset("parquet", data_files="/nfs/home/9303_xiechuanlong/dx/zhuyao/shortened-llm/data/wikitext/test-00000-of-00001.parquet", split="train")
+    traindata = load_from_disk("/home/zhangyingying/.cache/datasets/wikitext/train")
+    testdata = load_from_disk("/home/zhangyingying/.cache/datasets/wikitext/test")
     print(traindata)
     return traindata, testdata
 
@@ -95,7 +96,7 @@ def process_data(samples, tokenizer, seq_len, field_name, add_bos_to_every=False
     return IndexDataset(tensors=test_ids_batch)
 
 
-def get_loaders(name, tokenizer, seq_len=2048, batch_size=8, add_bos_to_every=False):
+def get_loaders(name, tokenizer, seq_len=2048, batch_size=1, add_bos_to_every=False):
     if "wikitext2" in name:
         train_data, test_data = get_wikitext2()
         test_dataset = process_data(
@@ -124,11 +125,7 @@ def get_examples(
     return_raw_dataset=False,
 ):
     if dataset == "c4":
-        traindata = load_dataset(
-            "allenai/c4",
-            data_files={"train": "en/c4-train.00000-of-01024.json.gz"},
-            split="train",
-        )
+        traindata = load_from_disk("/home/zhangyingying/.cache/datasets/c4/train")
     elif dataset == "bookcorpus":
         traindata = load_dataset("bookcorpus", split="train")
     else:

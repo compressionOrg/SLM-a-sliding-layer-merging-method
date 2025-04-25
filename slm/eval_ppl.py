@@ -40,9 +40,9 @@ def eval_ppl(
     output_dir,
     model,
     tokenizer,
-    datasets=["wikitext2", "ptb"],
+    datasets=["wikitext2"],
     max_seq_len=128,
-    batch_size=4,
+    batch_size=1,
     device="cuda",
     add_bos_to_every=False,
 ):
